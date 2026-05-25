@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netra Storage</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #11182d;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.12);
+      --border: rgba(255, 255, 255, 0.14);
+      --text: #f3f6ff;
+      --muted: #aeb8d0;
+      --accent: #5eead4;
+      --accent-2: #60a5fa;
+      --success: #22c55e;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(94, 234, 212, 0.16), transparent 26%),
+        linear-gradient(180deg, #08101d 0%, #0b1020 45%, #0f172a 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: min(1150px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(8, 16, 29, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      color: #08101d;
+      font-weight: 900;
+      box-shadow: 0 10px 30px rgba(96, 165, 250, 0.25);
+    }
+
+    .nav-note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 70px 0 32px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-card,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-card {
+      padding: 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--accent);
+      background: rgba(94, 234, 212, 0.08);
+      border: 1px solid rgba(94, 234, 212, 0.18);
+      padding: 8px 12px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 15px;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      color: #08101d;
+      background: linear-gradient(135deg, var(--accent), #7dd3fc);
+      box-shadow: 0 12px 30px rgba(94, 234, 212, 0.18);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .upload-panel {
+      padding: 28px;
+    }
+
+    .upload-panel h2,
+    .files-section h2,
+    .features h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+    }
+
+    .subtext {
+      color: var(--muted);
+      margin: 0 0 22px;
+      line-height: 1.7;
+    }
+
+    .dropzone {
+      border: 1.5px dashed rgba(94, 234, 212, 0.35);
+      background: linear-gradient(180deg, rgba(94, 234, 212, 0.06), rgba(255, 255, 255, 0.03));
+      border-radius: 20px;
+      padding: 26px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .dropzone-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 14px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dropzone h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .dropzone p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    form {
+      margin: 0;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="file"] {
+      flex: 1;
+      min-width: 220px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    button[type="submit"] {
+      border: 0;
+    }
+
+    .features {
+      padding: 24px 0 8px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .feature h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .files-section {
+      padding: 28px;
+      margin: 24px 0 60px;
+    }
+
+    .files-shell {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px 20px;
+    }
+
+    .files-shell ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .files-shell li {
+      margin: 10px 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .footer {
+      padding: 0 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 42px;
+      }
+
+      .hero-card,
+      .upload-panel,
+      .files-section {
+        padding: 22px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div>Netra Storage</div>
+      </div>
+      <div class="nav-note">Secure transfer gateway with monitored approvals</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">Professional cloud-style storage portal</div>
+          <h1>Store, review, and deliver files with confidence.</h1>
+          <p>
+            Netra Storage gives you a polished upload and download experience for documents,
+            archives, media, and project assets. Every request is routed through your monitored
+            approval workflow for controlled file handling.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#upload" class="btn btn-primary">Upload file</a>
+            <a href="#files" class="btn btn-secondary">Browse storage</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>Live</strong>
+              <span>Real-time monitored request flow</span>
+            </div>
+            <div class="stat">
+              <strong>Secure</strong>
+              <span>Approval-based transfer handling</span>
+            </div>
+            <div class="stat">
+              <strong>Simple</strong>
+              <span>Fast upload and clean retrieval</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel upload-panel" id="upload">
+          <h2>Upload your file</h2>
+          <p class="subtext">
+            Select a file and submit it to the storage queue. The request will be reviewed
+            through the monitoring interface before the server completes the action.
+          </p>
+
+          <div class="dropzone">
+            <div class="dropzone-icon">⇪</div>
+            <h3>Ready for transfer</h3>
+            <p>Choose your file below and send it to the monitored storage endpoint.</p>
+          </div>
+
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+              <input type="file" name="file" required />
+              <button class="btn btn-primary" type="submit">Start upload</button>
+            </div>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Built for managed storage operations</h2>
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>Controlled requests</h3>
+          <p>Uploads and downloads can be reviewed through your separate traffic approval interface before completion.</p>
+        </article>
+        <article class="feature">
+          <h3>Fast access</h3>
+          <p>Downloaded files are listed clearly and can be retrieved directly through generated storage links.</p>
+        </article>
+        <article class="feature">
+          <h3>Professional presentation</h3>
+          <p>A modern interface improves trust and makes the storage portal look more like a serious hosted platform.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel files-section" id="files">
+      <h2>Stored files</h2>
+      <p class="subtext">
+        Available files appear below. Download requests are also subject to your monitored approval workflow.
+      </p>
+      <div class="files-shell">
+        {{FILE_LIST}}
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    Netra Storage interface • upload, manage, and deliver files through a monitored gateway
+  </footer>
+</body>
+</html>
